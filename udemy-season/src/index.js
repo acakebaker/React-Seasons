@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './App.css';
 import SeasonDisplay from './components/SeasonDisplay';
+import Spinner from './components/Spinner';
 
 // This is a class component app.
 class App extends React.Component {
@@ -25,20 +26,33 @@ class App extends React.Component {
     console.log('My component was just updated - it rerendered.');
   }
 
-  // React says we have to define render()!
-  render() {
-    // Error message and no latitude.
+  // Returns the render content to the app.
+  renderContent() {
+    // Has error message and no latitude.
     if(this.state.errorMessage && !this.state.lat) {
-      return <div><h1>Error: {this.state.errorMessage}</h1></div>
+      return (
+        <div className='season-display'>
+          <h1>Could not determine your location.</h1>
+        </div>
+      );
     }
     
-    // Latitude and no error message. 
+    // Has latitude and no error message. 
     if(!this.state.errorMessage && this.state.lat) {
       return <SeasonDisplay lat={this.state.lat} />
     }
 
-    // No latitude and no error message.
-    return <div><h1>Loading...</h1></div>
+    // Has no latitude and no error message.
+    return <Spinner message='Please accept location request.' />;
+  }
+
+  // React says we have to define render()!
+  render() {
+    return (
+      <div>
+        {this.renderContent()}
+      </div>
+    );
   }
 }
 
